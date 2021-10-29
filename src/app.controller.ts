@@ -2,12 +2,15 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private schedulerRegistry: SchedulerRegistry,
+    @InjectQueue('app') private appQueue: Queue,
   ) {}
 
   @Get()
@@ -48,5 +51,14 @@ export class AppController {
   @Delete('/cron/:name')
   deleteCron(@Param('name') name: string) {
     this.schedulerRegistry.deleteCronJob(name);
+  }
+
+  @Post('images')
+  async postImages() {
+    const job = await this.appQueue.add('resizeImage', {
+      file: Date.now(),
+    });
+
+    console.log(job);
   }
 }
