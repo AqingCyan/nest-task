@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BullModule } from '@nestjs/bull';
+import { AppProcessor } from './app.processor';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { BullModule } from '@nestjs/bull';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppProcessor],
 })
 export class AppModule {}
