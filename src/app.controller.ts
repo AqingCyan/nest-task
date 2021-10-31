@@ -61,4 +61,14 @@ export class AppController {
 
     console.log(job);
   }
+
+  @Post('pause-queue')
+  async pauseQueue() {
+    await this.appQueue.pause();
+  }
+
+  @Post('resume-queue')
+  async resumeQueue() {
+    await this.appQueue.resume();
+  }
 }
